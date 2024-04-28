@@ -9,7 +9,7 @@ load_dotenv()
 #----------------------------------------------
 #getting Today's Date
 #----------------------
-today = date.today()
+today = "2024-04-22"#date.today()
 
 # setting env variables for AUTH to use it safely.
 #--------------------------------------------------
@@ -17,13 +17,22 @@ USER_NAME = os.getenv("USER")
 PASSWORD = os.getenv("PASS")
 URL = os.getenv("URI")
 
-lab = "11"
+lab = {"nozha": "1",
+       "syouf": "7",
+       "mamoora": "8",
+       "sharqy": "9",
+       "mansheya2": "10",
+       "mansheya1": "11",
+       "fornelgraya": "12",
+       "maryout": "13",
+       "kilo40": "14",
+       "zhour": "15",}
 
 #API Request.
 #-------------
-response = requests.get(url=f"{URL}/{lab}/{today}", auth=(USER_NAME, PASSWORD))
-response.raise_for_status()
-
-data = response.json()
-print(len(data))
-print(data)
+for x, y in lab.items():
+    response = requests.get(url=f"{URL}/{y}/{today}", auth=(USER_NAME, PASSWORD))
+    response.raise_for_status()
+    data = response.json()
+    print(len(data))
+    print(f" station {x}'s Data is: {data}")
