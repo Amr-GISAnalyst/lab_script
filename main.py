@@ -12,11 +12,10 @@ load_dotenv()
 input_fields = []
 output_fields = []
 arcpy.env.overwriteOutput = True
-arcpy.env.workspace = "E:\\python\\Lab_Project\\lab_script.gdb"
+arcpy.env.workspace = DATABASE
 
 #listing fields in both featureclasses
 #----------------------------------------
-
 input_list = arcpy.ListFields("input")
 for field in input_list:
     if field.name == "Shape" or field.name == "OBJECTID":
