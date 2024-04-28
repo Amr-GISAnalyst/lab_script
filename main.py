@@ -13,6 +13,8 @@ input_fields = []
 output_fields = []
 arcpy.env.overwriteOutput = True
 arcpy.env.workspace = "E:\\python\\Lab_Project\\lab_script.gdb"
+input_layer = "E:\\python\\Lab_Project\\lab_script.gdb\\input"
+output_layer = "E:\\python\\Lab_Project\\lab_script.gdb\\output"
 
 #listing fields in both featureclasses
 #----------------------------------------
@@ -45,8 +47,8 @@ lab = {"nozha": "1",
        "mamoora": "8",
        "sharqy": "9",
        "mansheya2": "10",
-       "mansheya1": "11",
-       "fornelgraya": "12",
+        "mansheya1": "11",
+        "fornelgraya": "12",
        "maryout": "13",
        "kilo40": "14",
        "zhour": "15",}
@@ -57,5 +59,20 @@ for x, y in lab.items():
     response = requests.get(url=f"{URL}/{y}/{today}", auth=(USER_NAME, PASSWORD))
     response.raise_for_status()
     data = response.json()
-#     print(len(data))
-#     print(f" station {x}'s Data is: {data}")
+    # index = 0
+    # row_col = 0
+    # with arcpy.da.UpdateCursor(input_layer, input_fields) as input_update:
+    #     for row in input_update:
+    #         if index > 7:
+    #             row_col += 1
+    #             if row_col > 10:
+    #                 break
+    #         elif data[index] is None:
+    #             index += 1
+    #         else:
+    #             row[row_col] = data[index]
+    #             input_update.updateRow(row)
+    #             index += 1
+
+    print(len(data))
+    print(f" station {x}'s Data is: {data}")
