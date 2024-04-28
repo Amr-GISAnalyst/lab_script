@@ -9,7 +9,7 @@ load_dotenv()
 #----------------------------------------------
 #getting Today's Date
 #----------------------
-today = "2024-04-22"#date.today()
+today = date.today()
 
 # setting env variables for AUTH to use it safely.
 #--------------------------------------------------
