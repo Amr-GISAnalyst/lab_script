@@ -12,7 +12,7 @@ load_dotenv()
 input_fields = []
 output_fields = []
 arcpy.env.overwriteOutput = True
-arcpy.env.workspace = DATABASE
+arcpy.env.workspace = "E:\\python\\Lab_Project\\lab_script.gdb"
 
 #listing fields in both featureclasses
 #----------------------------------------
