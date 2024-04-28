@@ -7,6 +7,30 @@ from dotenv import load_dotenv, dotenv_values
 #----------------------------------------------
 load_dotenv()
 #----------------------------------------------
+#workspace GDB
+#----------------
+input_fields = []
+output_fields = []
+arcpy.env.overwriteOutput = True
+arcpy.env.workspace = "E:\\python\\Lab_Project\\lab_script.gdb"
+
+#listing fields in both featureclasses
+#----------------------------------------
+
+input_list = arcpy.ListFields("input")
+for field in input_list:
+    if field.name == "Shape" or field.name == "OBJECTID":
+        pass
+    else:
+       input_fields.append(field.name)
+
+output_list = arcpy.ListFields("output")
+for field in output_list:
+    if field.name == "Shape" or field.name == "OBJECTID":
+        pass
+    else:
+       output_fields.append(field.name)
+
 #getting Today's Date
 #----------------------
 today = date.today()
@@ -34,5 +58,5 @@ for x, y in lab.items():
     response = requests.get(url=f"{URL}/{y}/{today}", auth=(USER_NAME, PASSWORD))
     response.raise_for_status()
     data = response.json()
-    print(len(data))
-    print(f" station {x}'s Data is: {data}")
+#     print(len(data))
+#     print(f" station {x}'s Data is: {data}")
