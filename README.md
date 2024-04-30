@@ -1,6 +1,6 @@
 # lab_script
 
-## a Script requests Data from Lab Database and deploys it to SDE GeoDataBase
+a Script requests Data from Lab Database and deploys it to SDE GeoDataBase
 
 the purpose is to update 2 layers tables with the lab analysis values in both intake and output water treated.
 
