@@ -17,14 +17,14 @@ arcpy.env.workspace = DATABASE
 
 #listing fields in both featureclasses
 #----------------------------------------
-input_list = arcpy.ListFields("input")
+input_list = arcpy.ListFields("GIS.APP_Features\\GIS.input")
 for field in input_list:
     if field.name == "Shape" or field.name == "OBJECTID" or field.name == "lab_code" or field.name == "wtp_name":
         pass
     else:
        input_fields.append(field.name)
 
-output_list = arcpy.ListFields("output")
+output_list = arcpy.ListFields("GIS.APP_Features\\GIS.output")
 for field in output_list:
     if field.name == "Shape" or field.name == "OBJECTID" or field.name == "lab_code" or field.name == "wtp_name":
         pass
@@ -36,7 +36,7 @@ for field in output_list:
 today = "2024-04-29"#date.today()
 
 # setting env variables for AUTH to use it safely.
-#--------------------------------------------------
+#---------------------------------------------------------------
 USER_NAME = os.getenv("USER")
 PASSWORD = os.getenv("PASS")
 URL = os.getenv("URI")
@@ -64,8 +64,11 @@ for labvalue in lab:
         if i == labvalue:
             output_data[i] = data_list[8:15:1]
 #-------------------------------------------------------------------------------------------------------------------------
+edit = arcpy.da.Editor(DATABASE)
+edit.startEditing(with_undo=False, multiuser_mode=True)
+edit.startOperation()
 for code in lab: #Adding Data to the intake featureclass from data_list.json to the fields according to Lab Code.
-    with arcpy.da.UpdateCursor("input",input_fields,f"lab_code = {code}") as input_rows:
+    with arcpy.da.UpdateCursor("GIS.APP_Features\\GIS.input",input_fields,f"lab_code = {code}") as input_rows:
             for row in input_rows:
                     for i in range(len(input_fields)):
                         if input_data[code][i] is None:
@@ -73,16 +76,23 @@ for code in lab: #Adding Data to the intake featureclass from data_list.json to 
                         else:
                             row[i] = input_data[code][i]
                     input_rows.updateRow(row)
+edit.stopOperation()
+edit.stopEditing(save_changes=True)
 #----------------------------------------------------------------------------------------------------------------------------
+edit = arcpy.da.Editor(DATABASE)
+edit.startEditing(with_undo=False, multiuser_mode=True)
+edit.startOperation()
 for code in lab: #Adding Data to the output featureclass from data_list.json to the fields according to Lab Code.
-    with arcpy.da.UpdateCursor("output",output_fields,f"lab_code = {code}") as output_rows:
+    with arcpy.da.UpdateCursor("GIS.APP_Features\\GIS.output",output_fields,f"lab_code = {code}") as output_rows:
             for row in output_rows:
-                    for i in range(len(output_fields)):
+                    for i in range(len(output_fields)): 
                         if output_data[code][i] is None:
                             continue
                         else:
                             row[i] = output_data[code][i]
                     output_rows.updateRow(row)
+edit.stopOperation()
+edit.stopEditing(save_changes=True)
 print("Operation Done Successfuly")
 # print(f"Input Values: {input_data}")
 # print(f"Output Values: {output_data}")
