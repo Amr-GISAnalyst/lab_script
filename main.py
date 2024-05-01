@@ -7,14 +7,19 @@ from dotenv import load_dotenv, dotenv_values
 #----------------------------------------------
 load_dotenv()
 #----------------------------------------------
-#workspace GDB
-#----------------
+# setting env variables for AUTH to use it safely.
+#---------------------------------------------------------------
+USER_NAME = os.getenv("USER")
+PASSWORD = os.getenv("PASS")
+URL = os.getenv("URI")
 DATABASE = os.getenv("GDB") #env variable for DATABASE Connection.
 input_fields = []
 output_fields = []
+#workspace GDB
+#----------------
 arcpy.env.overwriteOutput = True
 arcpy.env.workspace = DATABASE
-
+#------------------------------------------
 #listing fields in both featureclasses
 #----------------------------------------
 input_list = arcpy.ListFields("GIS.APP_Features\\GIS.input")
@@ -30,16 +35,10 @@ for field in output_list:
         pass
     else:
        output_fields.append(field.name)
-
-#getting Today's Date
+#-----------------------------------------------------------------------
+#setting up Today's Date
 #----------------------
-today = "2024-04-29"#date.today()
-
-# setting env variables for AUTH to use it safely.
-#---------------------------------------------------------------
-USER_NAME = os.getenv("USER")
-PASSWORD = os.getenv("PASS")
-URL = os.getenv("URI")
+today = date.today()
 #---------------------------------------------------------------
 lab = ["1", "7", "8", "9", "10", "11", "12", "13", "14", "15"] #Lab Code.
 input_data = {"1":[],"7":[],"8":[],"9":[],"10":[],"11":[],"12":[],"13":[],"14":[],"15":[]} #input values list.
@@ -53,10 +52,9 @@ for labvalue in lab:
     data = response.json() 
     for i in data: #adding the response.json to a list.
         data_list.append(i)
-    # for value in range(len(data_list)): #Replacing None to a values that can be easily selected.
-    #     if data_list[value] is None:
-    #         data_list[value] = 10000 #replaced None value with  10000.
-# Slicing Data.json to input and output according to the Element Order.            
+#-----------------------------------------------------------------------------------
+# Slicing Data.json to input and output according to the Element Order.
+#----------------------------------------------------------------------------            
     for x in input_data:
         if x == labvalue:
             input_data[x] = data_list[0:8:1]
@@ -64,6 +62,8 @@ for labvalue in lab:
         if i == labvalue:
             output_data[i] = data_list[8:15:1]
 #-------------------------------------------------------------------------------------------------------------------------
+#start edit session for input fetureclass adding lab values.
+#-------------------------------------------------------------------
 edit = arcpy.da.Editor(DATABASE)
 edit.startEditing(with_undo=False, multiuser_mode=True)
 edit.startOperation()
@@ -79,6 +79,8 @@ for code in lab: #Adding Data to the intake featureclass from data_list.json to 
 edit.stopOperation()
 edit.stopEditing(save_changes=True)
 #----------------------------------------------------------------------------------------------------------------------------
+#start edit session for output fetureclass adding lab values.
+#-------------------------------------------------------------------
 edit = arcpy.da.Editor(DATABASE)
 edit.startEditing(with_undo=False, multiuser_mode=True)
 edit.startOperation()
@@ -94,5 +96,3 @@ for code in lab: #Adding Data to the output featureclass from data_list.json to 
 edit.stopOperation()
 edit.stopEditing(save_changes=True)
 print("Operation Done Successfuly")
-# print(f"Input Values: {input_data}")
-# print(f"Output Values: {output_data}")
