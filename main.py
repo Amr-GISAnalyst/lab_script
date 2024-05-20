@@ -24,14 +24,14 @@ arcpy.env.workspace = DATABASE
 #----------------------------------------
 input_list = arcpy.ListFields("GIS.APP_Features\\GIS.input")
 for field in input_list:
-    if field.name == "Shape" or field.name == "OBJECTID" or field.name == "lab_code" or field.name == "wtp_name":
+    if field.name == "Shape" or field.name == "OBJECTID" or field.name == "lab_code" or field.name == "wtp_name" or field.name == "GlobalID":
         pass
     else:
        input_fields.append(field.name)
 
 output_list = arcpy.ListFields("GIS.APP_Features\\GIS.output")
 for field in output_list:
-    if field.name == "Shape" or field.name == "OBJECTID" or field.name == "lab_code" or field.name == "wtp_name":
+    if field.name == "Shape" or field.name == "OBJECTID" or field.name == "lab_code" or field.name == "wtp_name" or field.name == "GlobalID":
         pass
     else:
        output_fields.append(field.name)
@@ -72,7 +72,8 @@ for code in lab: #Adding Data to the intake featureclass from data_list.json to 
             for row in input_rows:
                     for i in range(len(input_fields)):
                         if input_data[code][i] is None:
-                            continue
+                            row[i] = None #continue
+                            input_rows.updateRow(row) 
                         else:
                             row[i] = input_data[code][i]
                     input_rows.updateRow(row)
@@ -89,7 +90,8 @@ for code in lab: #Adding Data to the output featureclass from data_list.json to 
             for row in output_rows:
                     for i in range(len(output_fields)): 
                         if output_data[code][i] is None:
-                            continue
+                            row[i] = None #continue
+                            output_rows.updateRow(row)
                         else:
                             row[i] = output_data[code][i]
                     output_rows.updateRow(row)
