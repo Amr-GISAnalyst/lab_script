@@ -4,10 +4,12 @@ from datetime import date
 import os
 import arcpy
 from dotenv import load_dotenv, dotenv_values
+print("getting today's Data in a format looks like ([y]-[mm]-[dd]).\n ---------------------------------------")
 #----------------------------------------------
 load_dotenv()
 #----------------------------------------------
 # setting env variables for AUTH to use it safely.
+print("setting env variables for AUTH to use it safely.\n ---------------------------------------")
 #---------------------------------------------------------------
 USER_NAME = os.getenv("USER")
 PASSWORD = os.getenv("PASS")
@@ -20,7 +22,8 @@ output_fields = []
 arcpy.env.overwriteOutput = True
 arcpy.env.workspace = DATABASE
 #------------------------------------------
-#listing fields in both featureclasses
+#listing fields in both featureclasses.
+print("listing fields in both featureclasses.\n ---------------------------------------")
 #----------------------------------------
 input_list = arcpy.ListFields("GIS.APP_Features\\GIS.input")
 for field in input_list:
@@ -44,6 +47,7 @@ lab = ["1", "7", "8", "9", "10", "11", "12", "13", "14", "15"] #Lab Code.
 input_data = {"1":[],"7":[],"8":[],"9":[],"10":[],"11":[],"12":[],"13":[],"14":[],"15":[]} #input values list.
 output_data = {"1":[],"7":[],"8":[],"9":[],"10":[],"11":[],"12":[],"13":[],"14":[],"15":[]} #output values list.
 #API Request.
+print("Requesting from the API.\n ---------------------------------------")
 #-------------
 for labvalue in lab:
     data_list = [] #adding the response.json to a list.
@@ -63,6 +67,7 @@ for labvalue in lab:
             output_data[i] = data_list[8:15:1]
 #-------------------------------------------------------------------------------------------------------------------------
 #start edit session for input fetureclass adding lab values.
+print("start edit session for input fetureclass adding lab values.\n ---------------------------------------")
 #-------------------------------------------------------------------
 edit = arcpy.da.Editor(DATABASE)
 edit.startEditing(with_undo=False, multiuser_mode=True)
@@ -81,6 +86,7 @@ edit.stopOperation()
 edit.stopEditing(save_changes=True)
 #----------------------------------------------------------------------------------------------------------------------------
 #start edit session for output fetureclass adding lab values.
+print("start edit session for output fetureclass adding lab values.\n ---------------------------------------")
 #-------------------------------------------------------------------
 edit = arcpy.da.Editor(DATABASE)
 edit.startEditing(with_undo=False, multiuser_mode=True)
